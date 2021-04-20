@@ -82,6 +82,7 @@ export default function HorizontalNonLinearAlternativeLabelStepper() {
           heightIndex = i;
           return true;
         }
+        return false;
       });
     }
     if (tempweight <= 55) {
@@ -94,6 +95,7 @@ export default function HorizontalNonLinearAlternativeLabelStepper() {
           weightIndex = i;
           return true;
         }
+        return false;
         // debugger;
       });
     }
@@ -116,6 +118,7 @@ export default function HorizontalNonLinearAlternativeLabelStepper() {
         }
         return companyArray[index] + tempShoulder + tempBellyShape + tempFit;
       });
+      alert(finalAnswer);
       console.log(finalAnswer, 'final');
     }
   };
