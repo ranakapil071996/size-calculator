@@ -202,8 +202,8 @@ export default function HorizontalNonLinearAlternativeLabelStepper() {
               <Button
                 style={{ outline: 0, borderRadius: 0 }}
                 color='primary'
-                onChange={(e) => setData({ ...data, gender: 'FEMALE' })}
-                onClick={data.gender === 'FEMALE' ? 'contained' : 'outlined'}
+                onClick={(e) => setData({ ...data, gender: 'FEMALE' })}
+                variant={data.gender === 'FEMALE' ? 'contained' : 'outlined'}
               >
                 Female
               </Button>
