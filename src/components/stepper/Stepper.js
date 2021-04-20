@@ -5,20 +5,24 @@ import Step from '@material-ui/core/Step';
 import StepButton from '@material-ui/core/StepButton';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import { Radio, Slider, TextField } from '@material-ui/core';
+import { Radio, Slider, StepLabel, TextField } from '@material-ui/core';
 import {
   bellyShape,
   calculator,
   company,
   fit,
   height,
+  matchResult,
   shoulderShape,
   weight
 } from './contant';
+import { Restore } from '@material-ui/icons';
+import ShopIcon from '../header/shop.png';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    width: '100%'
+    width: '100%',
+    paddingTop: 60
   },
   button: {
     marginRight: theme.spacing(1)
@@ -46,6 +50,15 @@ function getSteps() {
     'Step 5 of 5: Fit'
   ];
 }
+const initialData = {
+  name: '',
+  age: 16,
+  weight: 45,
+  gender: 'MALE',
+  height: ['5', '0']
+};
+
+const initialAnswer = { 1: '', 2: '', 3: '', 4: '' };
 
 export default function HorizontalNonLinearAlternativeLabelStepper() {
   const classes = useStyles();
@@ -53,17 +66,16 @@ export default function HorizontalNonLinearAlternativeLabelStepper() {
   const [completed, setCompleted] = React.useState(new Set());
   const [skipped, setSkipped] = React.useState(new Set());
   const steps = getSteps();
-  const [answers, setAnswers] = useState({ 1: '', 2: '', 3: '', 4: '' });
-  const [data, setData] = useState({
-    name: '',
-    age: 16,
-    weight: 45,
-    gender: 'MALE',
-    height: ['5', '0']
-  });
-  console.log(answers, data, 'data');
+  const [finalResult, setFinalResult] = useState();
+  const [answers, setAnswers] = useState(initialAnswer);
+  const [data, setData] = useState(initialData);
+  const [custom, setCustom] = useState([0, 0, 0]);
 
   const getResult = () => {
+    if (validation()) {
+      alert('Fill all steps');
+      return;
+    }
     let tempheight = +data.height.join('.');
     let tempweight = +data.weight;
     let heightIndex;
@@ -107,10 +119,13 @@ export default function HorizontalNonLinearAlternativeLabelStepper() {
         selectedSize = sizes[1];
       }
       console.log(company, selectedSize, sizes);
-      let companyArray = company[answers[1]][selectedSize];
-      let tempShoulder = shoulderShape[answers[2]];
-      let tempBellyShape = bellyShape[answers[3]];
-      let tempFit = fit[answers[4]];
+      let companyArray =
+        answers['1'] === 'CUSTOM' ? custom : company[answers[1]][selectedSize];
+      let tempShoulder = shoulderShape[answers[2]]
+        ? shoulderShape[answers[2]]
+        : 0;
+      let tempBellyShape = bellyShape[answers[3]] ? bellyShape[answers[3]] : 0;
+      let tempFit = fit[answers[4]] ? fit[answers[4]] : 0;
       console.log(tempShoulder, tempBellyShape, tempFit, 'F');
       const finalAnswer = companyArray.map((item, index) => {
         if (index === 1) {
@@ -118,8 +133,25 @@ export default function HorizontalNonLinearAlternativeLabelStepper() {
         }
         return companyArray[index] + tempShoulder + tempBellyShape + tempFit;
       });
-      alert(finalAnswer);
-      console.log(finalAnswer, 'final');
+      if (finalAnswer && finalAnswer.length) {
+        const test = matchResult.some((item, j) => {
+          const chestValue = Math.round(finalAnswer[0]);
+          if (chestValue >= item.range[0] && chestValue <= item.range[1]) {
+            if (item.type === 'XXL') {
+              setFinalResult(['XXL']);
+            } else {
+              setFinalResult([item.type, matchResult[j + 1].type]);
+            }
+            return true;
+          }
+          return false;
+        });
+        if (!test) {
+          alert('Something went wrong');
+        }
+      }
+    } else {
+      alert('You size not available. Kindly refer to size chart');
     }
   };
 
@@ -177,7 +209,7 @@ export default function HorizontalNonLinearAlternativeLabelStepper() {
               </Button>
             </div>
             <div>
-              <p style={{ marginBottom: 0 }}>Height:</p>
+              <p style={{ marginBottom: 10 }}>Height:</p>
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <TextField
                   onChange={(e) => {
@@ -212,7 +244,6 @@ export default function HorizontalNonLinearAlternativeLabelStepper() {
                   type='number'
                   label='inch'
                 />
-                <Button onClick={getResult}>Test</Button>
               </div>
             </div>
           </div>
@@ -220,37 +251,72 @@ export default function HorizontalNonLinearAlternativeLabelStepper() {
       case 1:
         return (
           <div
-            style={{ width: '25%', display: 'flex', flexDirection: 'column' }}
+            style={{ width: '50%', display: 'flex', flexDirection: 'column' }}
           >
             <h3>Choose a brand of jacket that fits you most?</h3>
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
               <div
                 onClick={() => setAnswers({ ...answers, 1: 'Roadster' })}
-                style={{ marginRight: 10 }}
+                style={{ marginRight: 10, flex: 1 }}
               >
                 <div>Roadster</div>
                 <Radio checked={answers['1'] === 'Roadster'} />
               </div>
               <div
                 onClick={() => setAnswers({ ...answers, 1: 'WROGN' })}
-                style={{ marginRight: 10 }}
+                style={{ marginRight: 10, flex: 1 }}
               >
                 <div>WROGN</div>
                 <Radio checked={answers['1'] === 'WROGN'} />
               </div>
               <div
                 onClick={() => setAnswers({ ...answers, 1: 'HNM' })}
-                style={{ marginRight: 10 }}
+                style={{ marginRight: 10, flex: 1 }}
               >
                 <div>HNM</div>
                 <Radio checked={answers['1'] === 'HNM'} />
               </div>
               <div
                 onClick={() => setAnswers({ ...answers, 1: 'Fort_collins' })}
-                style={{ marginRight: 10 }}
+                style={{ marginRight: 10, flex: 1 }}
               >
                 <div>Fort collins</div>
                 <Radio checked={answers['1'] === 'Fort_collins'} />
+              </div>
+              <div
+                onClick={() => setAnswers({ ...answers, 1: 'CUSTOM' })}
+                style={{ marginRight: 10, flex: 1 }}
+              >
+                <div>CUSTOM</div>
+                <Radio checked={answers['1'] === 'CUSTOM'} />
+                {answers['1'] === 'CUSTOM' && (
+                  <div
+                    style={{ display: 'flex', justifyContent: 'space-between' }}
+                  >
+                    <TextField
+                      type='number'
+                      style={{ width: '48%' }}
+                      label='Chest'
+                      value={custom[0]}
+                      onChange={(e) => {
+                        const tempCustom = [...custom];
+                        tempCustom[0] = parseFloat(e.target.value);
+                        setCustom(tempCustom);
+                      }}
+                    />
+                    <TextField
+                      type='number'
+                      style={{ width: '48%' }}
+                      label='Shoulder'
+                      value={custom[2]}
+                      onChange={(e) => {
+                        const tempCustom = [...custom];
+                        tempCustom[2] = parseFloat(e.target.value);
+                        setCustom(tempCustom);
+                      }}
+                    />
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -346,7 +412,6 @@ export default function HorizontalNonLinearAlternativeLabelStepper() {
                 <Radio checked={answers['4'] === 'Loose'} />
               </div>
             </div>
-            <Button onClick={getResult}>Test</Button>
           </div>
         );
       default:
@@ -356,25 +421,6 @@ export default function HorizontalNonLinearAlternativeLabelStepper() {
 
   const totalSteps = () => {
     return getSteps().length;
-  };
-
-  const isStepOptional = (step) => {
-    return false;
-  };
-
-  const handleSkip = () => {
-    if (!isStepOptional(activeStep)) {
-      // You probably want to guard against something like this
-      // it should never occur unless someone's actively trying to break something.
-      throw new Error("You can't skip a step that isn't optional.");
-    }
-
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    setSkipped((prevSkipped) => {
-      const newSkipped = new Set(prevSkipped.values());
-      newSkipped.add(activeStep);
-      return newSkipped;
-    });
   };
 
   const skippedSteps = () => {
@@ -408,126 +454,172 @@ export default function HorizontalNonLinearAlternativeLabelStepper() {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
-  const handleStep = (step) => () => {
-    setActiveStep(step);
-  };
-
-  const handleComplete = () => {
-    const newCompleted = new Set(completed);
-    newCompleted.add(activeStep);
-    setCompleted(newCompleted);
-
-    /**
-     * Sigh... it would be much nicer to replace the following if conditional with
-     * `if (!this.allStepsComplete())` however state is not set when we do this,
-     * thus we have to resort to not being very DRY.
-     */
-    if (completed.size !== totalSteps() - skippedSteps()) {
-      handleNext();
+  const renderCompleted = (index) => {
+    if (index === 0) {
+      if (
+        data.name &&
+        data.age > 0 &&
+        data.weight > 0 &&
+        data.gender &&
+        height &&
+        height.length
+      ) {
+        return true;
+      }
+      return false;
+    } else {
+      if (answers[index.toString()]) {
+        return true;
+      } else {
+        return false;
+      }
     }
   };
 
-  const handleReset = () => {
-    setActiveStep(0);
-    setCompleted(new Set());
-    setSkipped(new Set());
+  const validation = () => {
+    return getSteps().some((item, index) => !renderCompleted(index));
   };
 
-  const isStepSkipped = (step) => {
-    return skipped.has(step);
-  };
-
-  function isStepComplete(step) {
-    return completed.has(step);
+  if (finalResult) {
+    return (
+      <div className={classes.root}>
+        <div
+          style={{ flexDirection: 'column' }}
+          className={classes.instructions}
+        >
+          <h1>Final Result</h1>
+          <h5>Hi, {data.name}, You final result is</h5>
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center'
+            }}
+          >
+            <div
+              style={{
+                background: '#f05524',
+                color: '#fff',
+                width: '100px',
+                height: '100px',
+                borderRadius: '50%',
+                border: '1px solid #e72744',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                fontSize: 25,
+                fontWeight: 600,
+                textTransform: 'uppercase'
+              }}
+            >
+              {finalResult[0]}
+            </div>
+            {finalResult && finalResult.length === 2 ? (
+              <>
+                <div style={{ margin: '0 20px', color: '#777', fontSize: 16 }}>
+                  OR
+                </div>
+                <div
+                  style={{
+                    background: '#f05524',
+                    color: '#fff',
+                    width: '100px',
+                    height: '100px',
+                    borderRadius: '50%',
+                    border: '1px solid #e72744',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    fontSize: 25,
+                    fontWeight: 600,
+                    textTransform: 'uppercase'
+                  }}
+                >
+                  {finalResult[1]}
+                </div>
+              </>
+            ) : null}
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <img src={ShopIcon} style={{ width: 200 }} alt='shop' />
+          </div>
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              margin: '20px 0'
+            }}
+          >
+            <Button
+              onClick={() => {
+                setData(initialData);
+                setAnswers(initialAnswer);
+                setFinalResult(null);
+                setActiveStep(0);
+              }}
+              variant='outlined'
+              color='primary'
+            >
+              Reset <Restore style={{ marginLeft: 10 }} />
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (
     <div className={classes.root}>
       <Stepper alternativeLabel nonLinear activeStep={activeStep}>
         {steps.map((label, index) => {
-          const stepProps = {};
-          const buttonProps = {};
-          if (isStepOptional(index)) {
-            buttonProps.optional = (
-              <Typography variant='caption'>Optional</Typography>
-            );
-          }
-          if (isStepSkipped(index)) {
-            stepProps.completed = false;
-          }
           return (
-            <Step key={label} {...stepProps}>
-              <StepButton
-                onClick={handleStep(index)}
-                completed={isStepComplete(index)}
-                {...buttonProps}
-              >
-                {label}
+            <Step
+              completed={
+                index === 0
+                  ? renderCompleted(index)
+                  : Boolean(answers[index.toString()])
+              }
+              key={label}
+            >
+              <StepButton onClick={() => setActiveStep(index)}>
+                <StepLabel>{label}</StepLabel>
               </StepButton>
             </Step>
           );
         })}
       </Stepper>
       <div>
-        {allStepsCompleted() ? (
-          <div>
-            <Typography className={classes.instructions}>
-              All steps completed - you&apos;re finished
-            </Typography>
-            <Button onClick={handleReset}>Reset</Button>
+        <div>
+          <Typography className={classes.instructions}>
+            {getStepContent(activeStep)}
+          </Typography>
+          <div style={{ marginTop: 20 }}>
+            <Button
+              disabled={activeStep === 0}
+              onClick={handleBack}
+              className={classes.button}
+            >
+              Back
+            </Button>
+            <Button
+              variant='contained'
+              color='primary'
+              onClick={activeStep === 4 ? getResult : handleNext}
+              className={classes.button}
+            >
+              {activeStep === 4 ? 'Result' : 'Next'}
+            </Button>
           </div>
-        ) : (
-          <div>
-            <Typography className={classes.instructions}>
-              {getStepContent(activeStep)}
-            </Typography>
-            <div>
-              <Button
-                disabled={activeStep === 0}
-                onClick={handleBack}
-                className={classes.button}
-              >
-                Back
-              </Button>
-              <Button
-                variant='contained'
-                color='primary'
-                onClick={handleNext}
-                className={classes.button}
-              >
-                Next
-              </Button>
-              {isStepOptional(activeStep) && !completed.has(activeStep) && (
-                <Button
-                  variant='contained'
-                  color='primary'
-                  onClick={handleSkip}
-                  className={classes.button}
-                >
-                  Skip
-                </Button>
-              )}
-
-              {activeStep !== steps.length &&
-                (completed.has(activeStep) ? (
-                  <Typography variant='caption' className={classes.completed}>
-                    Step {activeStep + 1} already completed
-                  </Typography>
-                ) : (
-                  <Button
-                    variant='contained'
-                    color='primary'
-                    onClick={handleComplete}
-                  >
-                    {completedSteps() === totalSteps() - 1
-                      ? 'Finish'
-                      : 'Complete Step'}
-                  </Button>
-                ))}
-            </div>
-          </div>
-        )}
+        </div>
       </div>
+      {false && (
+        <div
+          onClick={() => {
+            setCompleted();
+            setSkipped();
+          }}
+        ></div>
+      )}
     </div>
   );
 }

@@ -1,3 +1,30 @@
+export const matchResult = [
+  {
+    type: 'XS',
+    range: [0, 39]
+  },
+  {
+    type: 'S',
+    range: [38, 41]
+  },
+  {
+    type: 'M',
+    range: [42, 43]
+  },
+  {
+    type: 'L',
+    range: [44, 45]
+  },
+  {
+    type: 'XL',
+    range: [46, 47]
+  },
+  {
+    type: 'XXL',
+    range: [48, 56]
+  }
+];
+
 export const shoulderShape = {
   Narrow: -1,
   Regular: 0,
