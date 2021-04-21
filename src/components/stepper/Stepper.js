@@ -160,7 +160,14 @@ export default function HorizontalNonLinearAlternativeLabelStepper() {
       case 0:
         return (
           <div
-            style={{ width: '20%', display: 'flex', flexDirection: 'column' }}
+            style={{
+              width: '30%',
+              display: 'flex',
+              flexDirection: 'column',
+              border: '1px solid #e72744',
+              padding: 20,
+              borderRadius: 16
+            }}
           >
             <TextField
               style={{ width: '100%', marginBottom: 15 }}
@@ -185,6 +192,8 @@ export default function HorizontalNonLinearAlternativeLabelStepper() {
               defaultValue={45}
               // getAriaValueText={50}
               value={data.weight}
+              min={1}
+              max={106}
               onChange={(e, value) => setData({ ...data, weight: value })}
               aria-labelledby='input-slide'
               valueLabelDisplay='auto'
@@ -195,7 +204,7 @@ export default function HorizontalNonLinearAlternativeLabelStepper() {
                 style={{ outline: 0, borderRadius: 0 }}
                 color='primary'
                 variant={data.gender === 'MALE' ? 'contained' : 'outlined'}
-                onClick={(e) => setData({ data, gender: 'MALE' })}
+                onClick={(e) => setData({ ...data, gender: 'MALE' })}
               >
                 Male
               </Button>
