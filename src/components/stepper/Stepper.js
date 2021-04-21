@@ -523,7 +523,7 @@ export default function HorizontalNonLinearAlternativeLabelStepper() {
             >
               {finalResult[0]}
             </div>
-            {finalResult && finalResult.length === 2 ? (
+            {false && finalResult.length === 2 ? (
               <>
                 <div style={{ margin: '0 20px', color: '#777', fontSize: 16 }}>
                   OR
