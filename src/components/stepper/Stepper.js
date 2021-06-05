@@ -18,6 +18,17 @@ import {
 } from './contant';
 import { Restore } from '@material-ui/icons';
 import ShopIcon from '../header/shop.png';
+import BroadPng from '../../asset/broad.png';
+import NarrowPng from '../../asset/narrow.png';
+import RegularPng from '../../asset/regular.png';
+import AveragePng from '../../asset/average.png';
+import FlatPng from '../../asset/flat.png';
+import RoundedPng from '../../asset/rounded.png';
+import RoadsterPng from '../../asset/roadster.jpeg';
+import CustomPng from '../../asset/custom.png';
+import WognPng from '../../asset/wogn.png';
+import HMpng from '../../asset/hm.png';
+import FortPng from '../../asset/fort.png';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -186,7 +197,7 @@ export default function HorizontalNonLinearAlternativeLabelStepper() {
               aria-labelledby='input-slide'
               valueLabelDisplay='auto'
             />
-            <p style={{ margin: 0 }}>Weight</p>
+            <p style={{ margin: 0 }}>Weight(kg)</p>
             <Slider
               style={{ width: '100%', marginBottom: 15 }}
               defaultValue={45}
@@ -268,35 +279,50 @@ export default function HorizontalNonLinearAlternativeLabelStepper() {
                 onClick={() => setAnswers({ ...answers, 1: 'Roadster' })}
                 style={{ marginRight: 10, flex: 1 }}
               >
-                <div>Roadster</div>
+                {/* <div>Roadster</div> */}
+                <img
+                  height={100}
+                  width={100}
+                  src={RoadsterPng}
+                  alt='Roadster'
+                />
                 <Radio checked={answers['1'] === 'Roadster'} />
               </div>
               <div
                 onClick={() => setAnswers({ ...answers, 1: 'WROGN' })}
                 style={{ marginRight: 10, flex: 1 }}
               >
-                <div>WROGN</div>
+                {/* <div>WROGN</div> */}
+                <img height={100} width={100} src={WognPng} alt='WROGN' />
                 <Radio checked={answers['1'] === 'WROGN'} />
               </div>
               <div
                 onClick={() => setAnswers({ ...answers, 1: 'HNM' })}
                 style={{ marginRight: 10, flex: 1 }}
               >
-                <div>HNM</div>
+                {/* <div>HNM</div> */}
+                <img height={100} width={100} src={HMpng} alt='HNM' />
                 <Radio checked={answers['1'] === 'HNM'} />
               </div>
               <div
                 onClick={() => setAnswers({ ...answers, 1: 'Fort_collins' })}
                 style={{ marginRight: 10, flex: 1 }}
               >
-                <div>Fort collins</div>
+                {/* <div>Fort collins</div> */}
+                <img
+                  height={100}
+                  width={100}
+                  src={FortPng}
+                  alt='Fort collins'
+                />
                 <Radio checked={answers['1'] === 'Fort_collins'} />
               </div>
               <div
                 onClick={() => setAnswers({ ...answers, 1: 'CUSTOM' })}
                 style={{ marginRight: 10, flex: 1 }}
               >
-                <div>CUSTOM</div>
+                {/* <div>CUSTOM</div> */}
+                <img height={100} width={100} src={CustomPng} alt='CUSTOM' />
                 <Radio checked={answers['1'] === 'CUSTOM'} />
                 {answers['1'] === 'CUSTOM' && (
                   <div
@@ -305,7 +331,7 @@ export default function HorizontalNonLinearAlternativeLabelStepper() {
                     <TextField
                       type='number'
                       style={{ width: '48%' }}
-                      label='Chest'
+                      label='Chest(in)'
                       value={custom[0]}
                       onChange={(e) => {
                         const tempCustom = [...custom];
@@ -316,7 +342,7 @@ export default function HorizontalNonLinearAlternativeLabelStepper() {
                     <TextField
                       type='number'
                       style={{ width: '48%' }}
-                      label='Shoulder'
+                      label='Shoulder(in)'
                       value={custom[2]}
                       onChange={(e) => {
                         const tempCustom = [...custom];
@@ -341,21 +367,24 @@ export default function HorizontalNonLinearAlternativeLabelStepper() {
                 onClick={() => setAnswers({ ...answers, 2: 'Narrow' })}
                 style={{ marginRight: 10 }}
               >
-                <div>Narrow</div>
+                {/* <div>Narrow</div> */}
+                <img width='100px' src={NarrowPng} alt='narrow' />
                 <Radio checked={answers['2'] === 'Narrow'} />
               </div>
               <div
                 onClick={() => setAnswers({ ...answers, 2: 'Regular' })}
                 style={{ marginRight: 10 }}
               >
-                <div>Regular</div>
+                {/* <div>Regular</div> */}
+                <img width='100px' src={RegularPng} alt='Regular' />
                 <Radio checked={answers['2'] === 'Regular'} />
               </div>
               <div
                 onClick={() => setAnswers({ ...answers, 2: 'Broad' })}
                 style={{ marginRight: 10 }}
               >
-                <div>Broad</div>
+                {/* <div>Broad</div> */}
+                <img width='100px' src={BroadPng} alt='Broad' />
                 <Radio checked={answers['2'] === 'Broad'} />
               </div>
             </div>
@@ -372,13 +401,15 @@ export default function HorizontalNonLinearAlternativeLabelStepper() {
                 onClick={() => setAnswers({ ...answers, 3: 'Regular' })}
                 style={{ marginRight: 10 }}
               >
-                <div>Regular</div>
+                <img width='100px' src={AveragePng} alt='average' />
+                <div>Average</div>
                 <Radio checked={answers['3'] === 'Regular'} />
               </div>
               <div
                 onClick={() => setAnswers({ ...answers, 3: 'Flat' })}
                 style={{ marginRight: 10 }}
               >
+                <img width='100px' src={FlatPng} alt='flat' />
                 <div>Flat</div>
                 <Radio checked={answers['3'] === 'Flat'} />
               </div>
@@ -386,6 +417,7 @@ export default function HorizontalNonLinearAlternativeLabelStepper() {
                 onClick={() => setAnswers({ ...answers, 3: 'Rounded' })}
                 style={{ marginRight: 10 }}
               >
+                <img width='100px' src={RoundedPng} alt='rounded' />
                 <div>Rounded</div>
                 <Radio checked={answers['3'] === 'Rounded'} />
               </div>
